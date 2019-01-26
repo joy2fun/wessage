@@ -33,8 +33,15 @@ wessage send {content}
 wessage send {content} -t {模板 id} -r {微信号 open id}
 ```
 
-更多命令和参数请运行：
+更多命令和选项：
 
 ```sh
+# 查看公众号已有模板列表
+wessage template
+# 查看配置信息
+wessage config list
+# 默认配置文件为 $HOME/.wessage.json，可以通过选项 --config 来自指定配置文件，如：
+wessage config list --config /path/to/config.json
+# 更多帮助信息
 wessage --help
 ```

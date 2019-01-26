@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"../wechat"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -15,6 +16,7 @@ var rootCmd = &cobra.Command{
 }
 
 var cfgFile string
+var refreshToken bool
 var receiver string
 var templateID string
 
@@ -34,10 +36,10 @@ func Init() {
 
 	// 全局选项，自定义配置文件的路径
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.wessage.json)")
-}
 
-// Execute 初始化
-func Execute() {
+	// 全局选项，是否刷新 access token
+	rootCmd.PersistentFlags().BoolVar(&refreshToken, "refresh-token", false, "refresh access token")
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -74,4 +76,6 @@ func initConfig() {
 		os.Exit(1)
 	}
 
+	// 刷新 access token
+	wechat.RefreshToken(refreshToken)
 }

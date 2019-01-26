@@ -5,7 +5,6 @@ import (
 	"os"
 	"time"
 
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -13,7 +12,7 @@ import (
 
 var cmdConfig = &cobra.Command{
 	Use:   "config",
-	Short: "Configuration commands",
+	Short: "Configuration related commands",
 	Long:  ``,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -26,28 +25,31 @@ var cmdConfigList = &cobra.Command{
 	Long:  ``,
 	Args:  cobra.MinimumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
 		table := tablewriter.NewWriter(os.Stdout)
 		table.SetHeader([]string{"key", "value"})
-		fmt.Println("Loaded config file:", home+"/.wessage.json")
-		c := viper.AllSettings()
-		for k := range c {
-			if k != "wx_token" {
-				var s []string
-				if k == "wx_token_expired_at" {
-					ts := viper.GetInt64(k)
-					s = append(s, k, time.Unix(ts, 0).String())
-				} else {
-					s = append(s, k, viper.GetString(k))
-				}
-				table.Append(s)
-			}
+		fmt.Println("Loaded config file:", viper.ConfigFileUsed())
+
+		keys := []string{
+			"wx_appid",
+			"wx_secret",
+			"wx_template_id",
+			"wx_receiver",
 		}
+
+		for _, v := range keys {
+			table.Append([]string{
+				v,
+				viper.GetString(v),
+			})
+		}
+
+		if ts := viper.GetInt64("wx_token_expired_at"); ts > 0 {
+			table.Append([]string{
+				"wx_token_expired_at",
+				time.Unix(ts, 0).String(),
+			})
+		}
+
 		table.Render()
 	},
 }

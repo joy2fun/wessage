@@ -11,7 +11,6 @@ var cmdTemplate = &cobra.Command{
 	Long:  ``,
 	Args:  cobra.MinimumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
-		wechat.RefreshToken()
 		wechat.ListTemplates()
 	},
 }
@@ -22,7 +21,6 @@ var cmdSend = &cobra.Command{
 	Long:  ``,
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		wechat.RefreshToken()
 		wechat.SendTemplateMessage(args[0], receiver, templateID)
 	},
 }
