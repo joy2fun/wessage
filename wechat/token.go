@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// RefreshToken 更新 access_token，如果 token 未过期，忽略
 func RefreshToken() {
 	expired := viper.GetInt("wx_token_expired_at")
 

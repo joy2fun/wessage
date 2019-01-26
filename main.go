@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	cmd.InitConfig()
+	cmd.Init()
 	cmd.Execute()
 }

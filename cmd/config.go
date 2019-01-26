@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"time"
 
@@ -62,30 +61,4 @@ var cmdConfigSet = &cobra.Command{
 		viper.Set(args[0], args[1])
 		viper.WriteConfig()
 	},
-}
-
-func InitConfig() {
-	viper.SetConfigName(".wessage")
-	home, err := homedir.Dir()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	// 如果文件不存在，创建
-	if _, err := os.Stat(home + "/.wessage.json"); os.IsNotExist(err) {
-		s := []byte("{}")
-		err := ioutil.WriteFile(home+"/.wessage.json", s, 0644)
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	viper.AddConfigPath(home)
-	viper.SetConfigType("json")
-	viper.ReadInConfig()
-}
-
-func initConfigCmd() {
-	cmdConfig.AddCommand(cmdConfigList, cmdConfigSet)
 }
