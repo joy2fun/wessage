@@ -48,6 +48,7 @@ var CmdSend = &cobra.Command{
 		buf := bytes.NewBufferString("")
 		t.Execute(buf, Msg{receiver, templateId, args[0]})
 
+		RefreshToken()
 		SendTemplateMessage(buf)
 	},
 }
