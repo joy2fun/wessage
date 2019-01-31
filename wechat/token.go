@@ -11,12 +11,18 @@ import (
 	"github.com/spf13/viper"
 )
 
-func RefreshToken() {
+// RefreshToken 更新 access_token，如果 token 未过期，忽略
+func RefreshToken(forceRefresh bool) {
 	expired := viper.GetInt("wx_token_expired_at")
 
-	if int64(expired) > time.Now().Unix() {
+	if !forceRefresh && int64(expired) > time.Now().Unix() {
 		// fmt.Println("cache alive")
 		return
+	}
+
+	if !viper.IsSet("wx_appid") || !viper.IsSet("wx_secret") {
+		fmt.Println("wx_appid or wx_secret is not configured in", viper.ConfigFileUsed())
+		os.Exit(1)
 	}
 
 	req, err := http.NewRequest("GET", "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential", nil)
@@ -50,5 +56,12 @@ func RefreshToken() {
 
 	viper.Set("wx_token", dat["access_token"])
 	viper.Set("wx_token_expired_at", time.Now().Unix()+3600) // ttl 3600s
-	viper.WriteConfig()
+
+	if err := viper.WriteConfig(); err != nil {
+		panic(err)
+	}
+
+	if forceRefresh {
+		fmt.Println("New access token has been saved into config file:", viper.ConfigFileUsed())
+	}
 }

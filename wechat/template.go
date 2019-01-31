@@ -7,27 +7,16 @@ import (
 	"os"
 
 	"github.com/olekukonko/tablewriter"
-	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-type Tpl struct {
-	Id      string `json:"template_id"`
+type tpl struct {
+	ID      string `json:"template_id"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
 
-var CmdTemplate = &cobra.Command{
-	Use:   "template",
-	Short: "List all templates",
-	Long:  ``,
-	Args:  cobra.MinimumNArgs(0),
-	Run: func(cmd *cobra.Command, args []string) {
-		RefreshToken()
-		ListTemplates()
-	},
-}
-
+// ListTemplates 列出当前账号所有的模板
 func ListTemplates() {
 	token := viper.GetString("wx_token")
 
@@ -46,18 +35,16 @@ func ListTemplates() {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	var dat map[string][]Tpl
+	var dat map[string][]tpl
 	if err := json.Unmarshal(body, &dat); err != nil {
-		panic(string(body))
+		panic(err)
 	}
 
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"template_id", "title", "content"})
 
 	for _, v := range dat["template_list"] {
-		var s []string
-		s = append(s, v.Id, v.Title, v.Content)
-		table.Append(s)
+		table.Append([]string{v.ID, v.Title, v.Content})
 	}
 
 	table.Render()
