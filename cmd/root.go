@@ -33,6 +33,8 @@ func Init() {
 	cmdSend.Flags().StringVarP(&receiver, "receiver", "r", "", "receiver's openId. use 'wx_receiver' in config if not present")
 	rootCmd.AddCommand(cmdSend)
 	rootCmd.AddCommand(cmdTemplate)
+	// 列出已关注的用户
+	rootCmd.AddCommand(cmdUser)
 
 	// 全局选项，自定义配置文件的路径
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.wessage.json)")

@@ -24,3 +24,13 @@ var cmdSend = &cobra.Command{
 		wechat.SendTemplateMessage(args[0], receiver, templateID)
 	},
 }
+
+var cmdUser = &cobra.Command{
+	Use:   "user",
+	Short: "List subscribed users",
+	Long:  ``,
+	Args:  cobra.ExactArgs(0),
+	Run: func(cmd *cobra.Command, args []string) {
+		wechat.ListUsers()
+	},
+}

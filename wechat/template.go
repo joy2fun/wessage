@@ -44,9 +44,7 @@ func ListTemplates() {
 	table.SetHeader([]string{"template_id", "title", "content"})
 
 	for _, v := range dat["template_list"] {
-		var s []string
-		s = append(s, v.ID, v.Title, v.Content)
-		table.Append(s)
+		table.Append([]string{v.ID, v.Title, v.Content})
 	}
 
 	table.Render()
