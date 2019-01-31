@@ -37,7 +37,7 @@ func ListTemplates() {
 
 	var dat map[string][]tpl
 	if err := json.Unmarshal(body, &dat); err != nil {
-		panic(string(body))
+		panic(err)
 	}
 
 	table := tablewriter.NewWriter(os.Stdout)
