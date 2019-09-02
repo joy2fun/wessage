@@ -16,12 +16,16 @@ var cmdTemplate = &cobra.Command{
 }
 
 var cmdSend = &cobra.Command{
-	Use:   "send [content]",
+	Use:   "send [content] [link]",
 	Short: "Send template message",
 	Long:  ``,
-	Args:  cobra.ExactArgs(1),
+	Args:  cobra.RangeArgs(1, 2),
 	Run: func(cmd *cobra.Command, args []string) {
-		wechat.SendTemplateMessage(args[0], receiver, templateID)
+		if len(args) == 2 {
+			wechat.SendTemplateMessage(args[0], args[1], receiver, templateID)
+		} else {
+			wechat.SendTemplateMessage(args[0], "", receiver, templateID)
+		}
 	},
 }
 

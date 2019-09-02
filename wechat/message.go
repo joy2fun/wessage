@@ -14,13 +14,15 @@ type msg struct {
 	Receiver   string
 	TemplateID string
 	Content    string
+	Link       string
 }
 
 // SendTemplateMessage 发送模板消息
-func SendTemplateMessage(message, receiver, templateID string) {
+func SendTemplateMessage(message, link, receiver, templateID string) {
 	const msgTpl = `{
 		"touser":"{{.Receiver}}",
 		"template_id":"{{.TemplateID}}",
+		"url": "{{.Link}}",
 		"data":{
 			"msg": {
 				"value": "{{.Content}}"
@@ -38,7 +40,7 @@ func SendTemplateMessage(message, receiver, templateID string) {
 
 	t := template.Must(template.New("msg").Parse(msgTpl))
 	buf := bytes.NewBufferString("")
-	t.Execute(buf, msg{receiver, templateID, message})
+	t.Execute(buf, msg{receiver, templateID, message, link})
 
 	callTemplateMessageAPI(buf)
 }
