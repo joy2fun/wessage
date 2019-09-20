@@ -13,6 +13,9 @@ var cmdTemplate = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		wechat.ListTemplates()
 	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		wechat.RefreshToken(refreshToken)
+	},
 }
 
 var cmdSend = &cobra.Command{
@@ -27,6 +30,9 @@ var cmdSend = &cobra.Command{
 			wechat.SendTemplateMessage(args[0], "", receiver, templateID)
 		}
 	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		wechat.RefreshToken(refreshToken)
+	},
 }
 
 var cmdUser = &cobra.Command{
@@ -36,5 +42,8 @@ var cmdUser = &cobra.Command{
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		wechat.ListUsers()
+	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		wechat.RefreshToken(refreshToken)
 	},
 }

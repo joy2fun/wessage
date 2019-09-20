@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"os"
 
-	"../wechat"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -78,6 +77,4 @@ func initConfig() {
 		os.Exit(1)
 	}
 
-	// 刷新 access token
-	wechat.RefreshToken(refreshToken)
 }
